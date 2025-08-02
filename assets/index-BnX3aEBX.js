@@ -36952,7 +36952,7 @@ Please change the parent <Route path="${b}"> to <Route path="${b === "/" ? "*" :
                         "Content-Type": "application/json"
                     },
                     body: JSON.stringify({
-                        usdtAddress: ue,
+                        wallet_address: ue,
                         amount: be
                     })
                 });
